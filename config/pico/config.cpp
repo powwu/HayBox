@@ -152,7 +152,7 @@ void setup1() {
     // Create Nunchuk input source.
     nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
 }
-
+// comment here so i can push no problem
 void loop1() {
     if (backends != nullptr) {
         nunchuk->UpdateInputs(backends[0]->GetInputs());
