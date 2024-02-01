@@ -81,7 +81,8 @@ void setup() {
     /* Select communication backend. */
     CommunicationBackend *primary_backend;
     if (console == ConnectedConsole::NONE) {
-            // If X is held on plugin then use Switch USB backend.
+        if (button_holds.x) {
+            // If no console detected and X is held on plugin then use Switch USB backend.
             NintendoSwitchBackend::RegisterDescriptor();
             backend_count = 1;
             primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
@@ -91,7 +92,7 @@ void setup() {
             primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
             return;
         } else if (button_holds.z) {
-            // If Z is held on plugin then use DInput backend.
+            // If no console detected and Z is held on plugin then use DInput backend.
             TUGamepad::registerDescriptor();
             TUKeyboard::registerDescriptor();
             backend_count = 2;
@@ -106,6 +107,18 @@ void setup() {
             backends = new CommunicationBackend *[backend_count] {
                 primary_backend, new B0XXInputViewer(input_sources, input_source_count)
             };
+        }
+    } else {
+        if (console == ConnectedConsole::GAMECUBE) {
+            primary_backend =
+                new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
+        } else if (console == ConnectedConsole::N64) {
+            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
+        }
+
+        // If console then only using 1 backend (no input viewer).
+        backend_count = 1;
+        backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
     // Default to Melee mode.
