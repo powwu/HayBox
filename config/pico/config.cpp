@@ -121,8 +121,8 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Ultimate mode.
-    primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
+    // Default to Rivals mode.
+    primary_backend->SetGameMode(new RivalsOfAether(socd::SOCD_2IP));
 
 }
 
